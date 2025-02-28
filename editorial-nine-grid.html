@@ -1,0 +1,788 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>九宮格作業的批改 | Editorial</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <style>
+        :root {
+            --primary-color: #f56a6a;
+            --secondary-color: #3d4449;
+            --light-blue: #e6ebef;
+            --light-red: #fae1e1;
+            --grid-border: #d2d7d9;
+        }
+        
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 2px;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            max-width: 800px;
+            margin: 2em auto;
+            border: 2px solid var(--grid-border);
+        }
+        
+        .grid-cell {
+            padding: 15px;
+            border: 1px solid var(--grid-border);
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .marriage-grid .grid-cell {
+            background-color: var(--light-blue);
+        }
+        
+        .migration-grid .grid-cell {
+            background-color: var(--light-red);
+        }
+        
+        .center-cell {
+            font-weight: bold;
+            background-color: var(--primary-color) !important;
+            color: #ffffff;
+        }
+        
+        .cell-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        
+        .cell-content {
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        
+        .question-preview {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(61, 68, 73, 0.95);
+            color: #ffffff;
+            padding: 15px;
+            font-size: 0.8em;
+            overflow-y: auto;
+            z-index: 10;
+            max-height: 100%;
+            scrollbar-width: thin;
+            text-align: left;
+        }
+        
+        .question-preview strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .question-preview ul {
+            margin: 0;
+            padding-left: 1.5em;
+            text-align: left;
+        }
+        
+        .question-preview li {
+            margin-bottom: 8px;
+            font-size: 0.85em;
+            line-height: 1.4;
+            text-align: left;
+        }
+        
+        /* 滾動條樣式 */
+        .question-preview::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .question-preview::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .question-preview::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        .grid-cell:hover .question-preview {
+            display: block;
+        }
+        
+        .grid-cell:hover {
+            transform: scale(1.02);
+            z-index: 5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .explanation {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f5f6f7;
+            border-radius: 5px;
+        }
+        
+        .principles {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .principle-card {
+            flex: 1;
+            min-width: 250px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 0.375em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: solid 1px rgba(210, 215, 217, 0.75);
+        }
+        
+        .principle-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        
+        .migration-principle .principle-title {
+            color: var(--primary-color);
+        }
+        
+        .arrow-container {
+            position: relative;
+            margin: 15px 0;
+            padding-left: 120px;
+            min-height: 30px;
+        }
+        
+        .arrow {
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            background-color: var(--primary-color);
+            clip-path: polygon(0 40%, 80% 40%, 80% 10%, 100% 50%, 80% 90%, 80% 60%, 0 60%);
+            left: 0;
+        }
+        
+        .arrow-text {
+            position: absolute;
+            left: 120px;
+            top: 0;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+        
+        .language-selector {
+            text-align: right;
+            margin-bottom: 1em;
+        }
+        
+        .lang-btn {
+            padding: 5px 15px;
+            background-color: #f5f6f7;
+            color: #3d4449;
+            border: 1px solid rgba(210, 215, 217, 0.75);
+            border-radius: 0.375em;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s;
+        }
+        
+        .lang-btn:hover {
+            background-color: #e6ebef;
+        }
+        
+        .lang-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        [lang="ja"] {
+            display: none;
+        }
+        
+        body.ja [lang="zh"] {
+            display: none;
+        }
+        
+        body.ja [lang="ja"] {
+            display: block;
+        }
+        
+        @media screen and (max-width: 736px) {
+            .principles {
+                flex-direction: column;
+            }
+            
+            .grid-layout {
+                aspect-ratio: auto;
+            }
+            
+            .cell-title {
+                font-size: 0.9em;
+            }
+            
+            .cell-content {
+                font-size: 0.75em;
+            }
+        }
+    </style>
+</head>
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+
+                <header id="header">
+                    <div class="language-selector">
+                        <button class="lang-btn active" data-lang="zh">中文</button>
+                        <button class="lang-btn" data-lang="ja">日本語</button>
+                    </div>
+                </header>
+
+                <section>
+                    <header class="main">
+                        <h1 lang="zh">九宮格作業批改與範例</h1>
+                        <h1 lang="ja">九宮格作業批改與範例</h1>
+                    </header>
+                    
+                        <div lang="zh" class="intro">
+                            <p>九宮格思考法是一種系統化的思考工具，能幫助我們進行結構化分析與全面性思考。以下用你們所發想的兩個主題試著作範例。</p>
+                        </div>
+                    
+                    <div lang="ja" class="intro">
+                        <p>九マス思考法は体系的な思考ツールで、構造化された分析と包括的な思考を支援します。以下では、インタビュー設計に九マス思考法を活用する方法を示す2つの応用例を紹介します。</p>
+                    </div>
+
+                    <!-- Example 1: Marriage -->
+                    <section>
+                        <h2 lang="zh">範例一：婚姻觀與經驗</h2>
+                        <h2 lang="ja">例１：結婚観と経験</h2>
+                        
+                        <div lang="zh">
+                            <p>本九宮格設計運用多元視角探索婚姻決策、關係動力與適應過程，透過系統性問題設計引導受訪者分享深入洞見。</p>
+                        </div>
+                        
+                        <div lang="ja">
+                            <p>この九マス設計は、結婚の意思決定、関係のダイナミクスと適応プロセスを多角的に探り、体系的な質問設計によって被面接者が深い洞察を共有できるよう導きます。</p>
+                        </div>
+                        
+                        <div class="nine-grid-container">
+                            <div class="grid-layout marriage-grid">
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">決策過程</div>
+                                    <div class="cell-title" lang="ja">意思決定過程</div>
+                                    <div class="cell-content" lang="zh">探討走向婚姻的思考歷程及關鍵影響因素</div>
+                                    <div class="cell-content" lang="ja">結婚に至る思考過程と重要な影響要因を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您是如何決定與伴侶步入婚姻的？</li>
+                                            <li>在做這個決定時，您採取了哪些行動來確認這是正確的選擇？</li>
+                                            <li>回想當時，做出結婚決定時您最強烈的情感是什麼？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>パートナーとの結婚をどのように決めましたか？</li>
+                                            <li>この決断が正しい選択であることを確認するために、どのような行動を取りましたか？</li>
+                                            <li>当時を振り返って、結婚を決めた時に最も強く感じた感情は何でしたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">價值觀與期待</div>
+                                    <div class="cell-title" lang="ja">価値観と期待</div>
+                                    <div class="cell-content" lang="zh">探討個人對婚姻的核心理念、期望和價值取向</div>
+                                    <div class="cell-content" lang="ja">結婚に対する個人の中核理念、期待と価値観を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>在您心目中，理想的婚姻生活是什麼樣子的？</li>
+                                            <li>在婚姻中，您最看重哪三個方面？為什麼？</li>
+                                            <li>您的哪些期待在婚後遇到了挑戰？您是如何調整的？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>あなたにとって、理想の結婚生活とはどのようなものですか？</li>
+                                            <li>結婚生活で最も重視する三つの側面は何ですか？なぜですか？</li>
+                                            <li>結婚後、どのような期待が課題に直面しましたか？どのように対応しましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">社會文化影響</div>
+                                    <div class="cell-title" lang="ja">社会文化的影響</div>
+                                    <div class="cell-content" lang="zh">探討外部社會環境、文化背景對個人婚姻觀和決策的影響</div>
+                                    <div class="cell-content" lang="ja">外部の社会環境や文化的背景が個人の結婚観と意思決定に与える影響を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您所處的社會環境對婚姻有什麼樣的普遍態度和期望？</li>
+                                            <li>社會對婚姻的期望在多大程度上影響了您的決定和體驗？</li>
+                                            <li>您是否曾因社會期望或家庭傳統而感到壓力？如何應對？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>あなたの社会環境では、結婚に対してどのような一般的な態度や期待がありますか？</li>
+                                            <li>社会の期待はあなたの決断や経験にどの程度影響しましたか？</li>
+                                            <li>社会的期待や家族の伝統によるプレッシャーを感じたことはありますか？どう対処しましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">關係動力</div>
+                                    <div class="cell-title" lang="ja">関係の力学</div>
+                                    <div class="cell-content" lang="zh">探討婚姻中的互動模式、權力分配和親密關係發展</div>
+                                    <div class="cell-content" lang="ja">結婚における相互作用パターン、力の配分と親密関係の発展を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您與伴侶之間有哪些特定的互動模式或習慣？這些是如何形成的？</li>
+                                            <li>在婚姻中，您和伴侶各自扮演什麼角色？</li>
+                                            <li>您的關係從戀愛到婚姻有哪些重要的變化？什麼保持不變？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>パートナーとの間にどのような特定の相互作用パターンや習慣がありますか？それらはどのように形成されましたか？</li>
+                                            <li>結婚において、あなたとパートナーはそれぞれどのような役割を担っていますか？</li>
+                                            <li>恋愛から結婚へと移行する中で、関係性にどのような重要な変化がありましたか？何が変わらなかったですか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell center-cell">
+                                    <div class="cell-title" lang="zh">婚姻觀與經驗</div>
+                                    <div class="cell-title" lang="ja">結婚観と経験</div>
+                                    <div class="cell-content" lang="zh">探討個人對婚姻本質的理解與實際體驗</div>
+                                    <div class="cell-content" lang="ja">結婚の本質に対する個人の理解と実際の経験を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>在您看來，婚姻的本質或核心意義是什麼？</li>
+                                            <li>您的實際婚姻體驗與您之前的期望有何不同？</li>
+                                            <li>婚姻為您的生活帶來了哪些最有價值的改變？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>あなたにとって、結婚の本質または中心的な意味は何ですか？</li>
+                                            <li>実際の結婚経験は、以前の期待とどのように異なっていましたか？</li>
+                                            <li>結婚があなたの生活にもたらした最も価値ある変化は何ですか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">轉變與適應</div>
+                                    <div class="cell-title" lang="ja">変化と適応</div>
+                                    <div class="cell-content" lang="zh">探討婚後的身份、生活方式和關係變化，以及適應過程</div>
+                                    <div class="cell-content" lang="ja">結婚後のアイデンティティ、ライフスタイルや関係性の変化、および適応過程を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>婚後您生活中最顯著的變化是什麼？</li>
+                                            <li>您是如何適應婚姻帶來的新角色和責任的？</li>
+                                            <li>婚姻如何改變了您對自己的認識和定位？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>結婚後、あなたの生活で最も顕著な変化は何でしたか？</li>
+                                            <li>結婚によってもたらされた新しい役割や責任にどのように適応しましたか？</li>
+                                            <li>結婚はあなたの自己認識やアイデンティティをどのように変えましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">衝突與協商</div>
+                                    <div class="cell-title" lang="ja">葛藤と交渉</div>
+                                    <div class="cell-content" lang="zh">探討婚姻中的矛盾、衝突來源及解決途徑</div>
+                                    <div class="cell-content" lang="ja">結婚における矛盾、葛藤の源と解決方法を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您與伴侶之間最常見的衝突或分歧是關於什麼？</li>
+                                            <li>當出現分歧時，您們通常如何互動？</li>
+                                            <li>您們有哪些有效的衝突解決方法？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>パートナーとの間で最も一般的な対立や意見の相違は何についてですか？</li>
+                                            <li>意見の相違が生じた場合、通常どのように対話しますか？</li>
+                                            <li>効果的な葛藤解決方法はどのようなものがありますか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">未來展望</div>
+                                    <div class="cell-title" lang="ja">将来の展望</div>
+                                    <div class="cell-content" lang="zh">探討對婚姻未來的規劃、期望和可能的發展方向</div>
+                                    <div class="cell-content" lang="ja">結婚の将来に対する計画、期待と可能な発展方向を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">範例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您如何想像您的婚姻五年後、十年後的樣子？</li>
+                                            <li>您和伴侶對未來有哪些共同目標？</li>
+                                            <li>您認為什麼是維持長久幸福婚姻的關鍵？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>5年後、10年後の結婚生活をどのように想像しますか？</li>
+                                            <li>あなたとパートナーにはどのような共通の将来目標がありますか？</li>
+                                            <li>長く幸せな結婚を維持するための鍵は何だと思いますか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">資源與支持</div>
+                                    <div class="cell-title" lang="ja">資源とサポート</div>
+                                    <div class="cell-content" lang="zh">探討維持與發展婚姻關係所需的內外部資源與支持系統</div>
+                                    <div class="cell-content" lang="ja">結婚関係の維持と発展に必要な内部・外部の資源とサポートシステムを探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>哪些人或群體成為您婚姻的重要支持來源？</li>
+                                            <li>您認為維持健康婚姻關係需要哪些關鍵資源？</li>
+                                            <li>當婚姻遇到困難時，您會向誰尋求幫助？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>どのような人々やグループがあなたの結婚の重要なサポート源となっていますか？</li>
+                                            <li>健全な結婚関係を維持するために必要な重要な資源は何だと思いますか？</li>
+                                            <li>結婚で困難に直面した場合、誰に助けを求めますか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        <div class="explanation">
+                            <h3 lang="zh">設計原則說明</h3>
+                            <h3 lang="ja">設計原則の説明</h3>
+                            <div class="principles">
+                                <div class="principle-card">
+                                    <div class="principle-title" lang="zh">MECE原則應用</div>
+                                    <div class="principle-title" lang="ja">MECE原則の応用</div>
+                                    <p lang="zh">格位設計遵循「相互獨立，完全窮盡」原則，確保無重疊且全面涵蓋婚姻各面向。時間維度涵蓋過去決策、現在關係和未來展望；關係維度包含個人、伴侶和社會層面。</p>
+                                    <p lang="ja">各マスの設計は「相互排他的、全体網羅的」原則に従い、重複がなく結婚のすべての側面を包括的にカバーします。時間軸では過去の決断、現在の関係、将来の展望を含み、関係軸では個人、パートナー、社会レベルを含みます。</p>
+                                </div>
+                                <div class="principle-card">
+                                    <div class="principle-title" lang="zh">視角多元性</div>
+                                    <div class="principle-title" lang="ja">視点の多様性</div>
+                                    <p lang="zh">整合人本視角（關注個人體驗）、系統視角（關注結構和互動）、過程視角（關注變化和發展）、文化視角（關注社會背景）和實用視角（關注問題解決）。</p>
+                                    <p lang="ja">人間中心の視点（個人の経験に焦点）、システム視点（構造と相互作用に焦点）、プロセス視点（変化と発展に焦点）、文化的視点（社会的背景に焦点）、実用的視点（問題解決に焦点）を統合しています。</p>
+                                </div>
+                            </div>
+                                
+                            <div class="arrow-container">
+                                <div class="arrow"></div>
+                                <div class="arrow-text" lang="zh">每個格位從描述性問題到反思性問題，層層深入</div>
+                                <div class="arrow-text" lang="ja">各マスは記述的質問から省察的質問へと段階的に深まる</div>
+                            </div>
+                                
+                            <div class="arrow-container">
+                                <div class="arrow"></div>
+                                <div class="arrow-text" lang="zh">問題設計避免引導性和封閉式問題</div>
+                                <div class="arrow-text" lang="ja">質問設計は誘導的・閉鎖的質問を避ける</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Example 2: Migration -->
+                    <section>
+                        <h2 lang="zh">範例二：移民決策與適應歷程</h2>
+                        <h2 lang="ja">例２：移住の決断と適応過程</h2>
+                            
+                        <div lang="zh">
+                            <p>本九宮格運用推力-拉力模型和跨文化適應理論，系統探討移民決策形成、身份轉變與環境適應的完整歷程。</p>
+                        </div>
+                        
+                        <div lang="ja">
+                            <p>この九マスは、プッシュ・プル理論と異文化適応理論を用いて、移住決断の形成、アイデンティティの変化、環境適応の完全なプロセスを体系的に探ります。</p>
+                        </div>
+                            
+                        <div class="nine-grid-container">
+                            <div class="grid-layout migration-grid">
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">推力因素</div>
+                                    <div class="cell-title" lang="ja">プッシュ要因</div>
+                                    <div class="cell-content" lang="zh">探討促使個人離開原居國的各種負面或驅動因素</div>
+                                    <div class="cell-content" lang="ja">個人が出身国を離れる様々なネガティブ要因や動機を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您離開原居國之前的生活狀況如何？面臨哪些挑戰？</li>
+                                            <li>是否有特定的事件促使您考慮移民？</li>
+                                            <li>除了經濟因素外，有哪些社會、政治或個人因素影響了您的決定？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>出身国を離れる前の生活状況はどうでしたか？どのような課題に直面していましたか？</li>
+                                            <li>移住を考えるきっかけとなった特定の出来事はありましたか？</li>
+                                            <li>経済的要因以外に、どのような社会的、政治的、または個人的要因があなたの決断に影響しましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">決策過程</div>
+                                    <div class="cell-title" lang="ja">意思決定過程</div>
+                                    <div class="cell-content" lang="zh">探討移民決策形成、評估和確定的心理和行動過程</div>
+                                    <div class="cell-content" lang="ja">移住決断の形成、評価、確定に至る心理的・行動的プロセスを探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>從最初有移民想法到最終決定，這個過程經歷了哪些階段？</li>
+                                            <li>您如何收集和評估關於移民的資訊？</li>
+                                            <li>在做出最終決定時，您經歷了哪些情感上的掙扎或確信？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>移住を最初に考えてから最終決断までに、どのような段階を経験しましたか？</li>
+                                            <li>移住に関する情報をどのように収集し、評価しましたか？</li>
+                                            <li>最終決断を下す際、どのような感情的な葛藤や確信を経験しましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">拉力因素</div>
+                                    <div class="cell-title" lang="ja">プル要因</div>
+                                    <div class="cell-content" lang="zh">探討吸引個人選擇特定目的地國家的各種正面或吸引因素</div>
+                                    <div class="cell-content" lang="ja">特定の目的地国を選ぶ際の様々なポジティブ要因や魅力を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您為什麼選擇這個特定國家作為移民目的地？</li>
+                                            <li>這個國家哪些方面最吸引您？</li>
+                                            <li>移民前，您對新國家生活有哪些具體期望？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>なぜこの特定の国を移住先として選びましたか？</li>
+                                            <li>この国のどのような側面があなたを最も惹きつけましたか？</li>
+                                            <li>移住前、新しい国での生活についてどのような具体的な期待がありましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">身份認同轉變</div>
+                                    <div class="cell-title" lang="ja">アイデンティティの変化</div>
+                                    <div class="cell-content" lang="zh">探討移民經歷如何影響個人對自我、文化和國家認同的理解</div>
+                                    <div class="cell-content" lang="ja">移住経験が自己、文化、国家的アイデンティティの理解にどう影響するかを探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>移民經歷如何改變了您對自己身份的認識？</li>
+                                            <li>您如何看待自己與原生文化和新文化的關係？</li>
+                                            <li>您現在對「家」的概念有什麼理解？在哪裡感到最有歸屬感？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>移住経験はあなたのアイデンティティ認識をどのように変えましたか？</li>
+                                            <li>出身文化と新しい文化との関係をどのように捉えていますか？</li>
+                                            <li>現在、「家」という概念についてどのように理解していますか？どこに最も帰属感を感じますか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell center-cell">
+                                    <div class="cell-title" lang="zh">移民決策與適應歷程</div>
+                                    <div class="cell-title" lang="ja">移住決断と適応過程</div>
+                                    <div class="cell-content" lang="zh">探討移民選擇的核心本質及整體適應過程</div>
+                                    <div class="cell-content" lang="ja">移住選択の核心と全体的な適応プロセスを探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>綜合考慮，移民對您的生活帶來的最根本變化是什麼？</li>
+                                            <li>在整個移民和適應過程中，您經歷了哪些關鍵的轉折點？</li>
+                                            <li>這段經歷如何改變了您作為一個人？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>総合的に考えて、移住があなたの生活にもたらした最も根本的な変化は何ですか？</li>
+                                            <li>移住と適応の全過程において、どのような重要な転機を経験しましたか？</li>
+                                            <li>この経験はあなたをどのように変えましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">適應歷程策略</div>
+                                    <div class="cell-title" lang="ja">適応過程の戦略</div>
+                                    <div class="cell-content" lang="zh">探討個人為適應新環境採取的各種調適方法和應對策略</div>
+                                    <div class="cell-content" lang="ja">新環境に適応するために個人が取る様々な調整法や対処戦略を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>您的適應過程可以分為哪些階段？每個階段的特點是什麼？</li>
+                                            <li>在適應過程中，您遇到的最大挑戰是什麼？如何克服？</li>
+                                            <li>您如何學習和適應新的文化規範和社會期望？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>あなたの適応過程はどのような段階に分けられますか？各段階の特徴は何ですか？</li>
+                                            <li>適応過程で直面した最大の課題は何ですか？どのように克服しましたか？</li>
+                                            <li>新しい文化規範や社会的期待をどのように学び、適応しましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">社會網絡重構</div>
+                                    <div class="cell-title" lang="ja">社会的ネットワークの再構築</div>
+                                    <div class="cell-content" lang="zh">探討移民如何重建社交圈、建立新的人際關係</div>
+                                    <div class="cell-content" lang="ja">移住者が社会的つながりをどう再構築し、新しい人間関係を築くかを探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>移民如何改變了您與原居國家人和朋友的關係？</li>
+                                            <li>您是如何在新國家建立社交圈的？</li>
+                                            <li>您與當地人建立友誼的經歷如何？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>移住によって、出身国の人々や友人との関係はどのように変わりましたか？</li>
+                                            <li>新しい国でどのように社交的なつながりを構築しましたか？</li>
+                                            <li>地元の人々との友情を築く経験はどのようなものでしたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">預期與現實差異</div>
+                                    <div class="cell-title" lang="ja">期待と現実のギャップ</div>
+                                    <div class="cell-content" lang="zh">探討移民前的期望與實際經歷之間的差距及其影響</div>
+                                    <div class="cell-content" lang="ja">移住前の期待と実際の経験の間のギャップとその影響を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>移民前，您對新生活有哪些具體期望？</li>
+                                            <li>實際經歷與您的期望有哪些重要差異？</li>
+                                            <li>面對期望與現實的差距，您如何調整自己的想法和感受？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>移住前、新しい生活についてどのような具体的な期待がありましたか？</li>
+                                            <li>実際の経験とあなたの期待の間にどのような重要な違いがありましたか？</li>
+                                            <li>期待と現実のギャップに直面して、どのようにあなたの考えや感情を調整しましたか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="grid-cell">
+                                    <div class="cell-title" lang="zh">未來規劃與評估</div>
+                                    <div class="cell-title" lang="ja">将来計画と評価</div>
+                                    <div class="cell-content" lang="zh">探討移民對未來的規劃、對移民決定的評估</div>
+                                    <div class="cell-content" lang="ja">移住者の将来計画と移住決断の評価を探る</div>
+                                    <div class="question-preview">
+                                        <strong lang="zh">示例問題：</strong>
+                                        <strong lang="ja">質問例：</strong>
+                                        <ul lang="zh">
+                                            <li>總體而言，您如何評價您的移民決定？</li>
+                                            <li>您對未來5-10年有什麼規劃？</li>
+                                            <li>您是否曾考慮回到原居國？在什麼情況下？</li>
+                                        </ul>
+                                        <ul lang="ja">
+                                            <li>全体として、あなたの移住決断をどのように評価しますか？</li>
+                                            <li>今後5〜10年についてどのような計画がありますか？</li>
+                                            <li>出身国に戻ることを考えたことはありますか？どのような状況でですか？</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            
+                        <div class="explanation">
+                            <h3 lang="zh">設計原則說明</h3>
+                            <h3 lang="ja">設計原則の説明</h3>
+                            <div class="principles">
+                                <div class="principle-card migration-principle">
+                                    <div class="principle-title" lang="zh">MECE原則應用</div>
+                                    <div class="principle-title" lang="ja">MECE原則の応用</div>
+                                    <p lang="zh">格位設計基於推力-拉力模型，並遵循時間維度（移民前、中、後）、層次維度（個人、人際、社會）和心理維度（認知、情感、行為）的完整涵蓋，確保相互獨立且全面。</p>
+                                    <p lang="ja">各マスの設計はプッシュ・プル理論に基づき、時間軸（移住前・中・後）、レベル軸（個人、対人、社会）、心理軸（認知、感情、行動）の完全なカバレッジを確保し、相互排他的かつ包括的です。</p>
+                                </div>
+                                <div class="principle-card migration-principle">
+                                    <div class="principle-title" lang="zh">跨文化視角整合</div>
+                                    <div class="principle-title" lang="ja">異文化視点の統合</div>
+                                    <p lang="zh">整合人本視角、社會學視角、跨文化視角、時間發展視角和實用視角，特別注重文化適應和身份認同的複雜性，關注移民過程中的文化轉換和融合。</p>
+                                    <p lang="ja">人間中心の視点、社会学的視点、異文化視点、時間発展的視点、実用的視点を統合し、特に文化適応とアイデンティティの複雑性に注目し、移住過程における文化変容と融合に焦点を当てます。</p>
+                                </div>
+                            </div>
+                                
+                            <div class="arrow-container">
+                                <div class="arrow" style="background-color: var(--primary-color);"></div>
+                                <div class="arrow-text" lang="zh">問題設計鼓勵分享具體經歷，避免抽象討論</div>
+                                <div class="arrow-text" lang="ja">質問設計は具体的な経験の共有を促し、抽象的な議論を避ける</div>
+                            </div>
+                                
+                            <div class="arrow-container">
+                                <div class="arrow" style="background-color: var(--primary-color);"></div>
+                                <div class="arrow-text" lang="zh">格位間保持邏輯關聯，呈現移民歷程的完整性</div>
+                                <div class="arrow-text" lang="ja">マス間の論理的つながりを保ち、移住過程の完全性を示す</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="usage">
+                        <h2 lang="zh">說明</h2>
+                        <h2 lang="ja">説明</h2>
+                        
+                        <div lang="zh">
+                            
+                            <p>1. <strong>問題應用建議</strong>：根據實際訪談情境，可靈活調整問題順序和表述，保持對話自然流暢</p>
+                            <p>2. <strong>視角調整</strong>：可根據研究目的和受訪者特點，強化或調整特定格位的問題深度</p>
+                            <p>3. <strong>文化敏感性</strong>：在跨文化訪談中，注意表達方式的文化適配性，避免文化偏見</p>
+                        </div>
+                        
+                        <div lang="ja">
+                            
+                            <p>1. <strong>質問応用の提案</strong>：実際のインタビュー状況に応じて、質問の順序や表現を柔軟に調整し、対話の自然な流れを維持します</p>
+                            <p>2. <strong>視点の調整</strong>：研究目的や被面接者の特性に応じて、特定のマスの質問の深さを強化または調整できます</p>
+                            <p>3. <strong>文化的感受性</strong>：異文化間インタビューでは、表現方法の文化的適合性に注意し、文化的偏見を避けます</p>
+                        </div>
+                    </section>
+
+                </section>
+
+            </div>
+        </div>
+
+        <div id="sidebar">
+            
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/browser.min.js"></script>
+    <script src="assets/js/breakpoints.min.js"></script>
+    <script src="assets/js/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script>
+        // Language switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const langButtons = document.querySelectorAll('.lang-btn');
+            
+            langButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    document.body.className = lang;
+                    
+                    // Update active state of buttons
+                    langButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
