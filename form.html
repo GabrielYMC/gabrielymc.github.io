@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>淡江大學課外組社團器材借用單</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "SimSun", "Microsoft JhengHei", Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 10px;
+            font-size: 14px;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid #000;
+        }
+        .form-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 5px;
+            vertical-align: middle;
+        }
+        input[type="text"], input[type="number"], input[type="tel"] {
+            width: 100%;
+            padding: 3px;
+            border: none;
+            border-bottom: 1px dotted #999;
+            background-color: transparent;
+        }
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 5px;
+        }
+        .borrow-info {
+            width: 60%;
+        }
+        .borrower-info {
+            width: 40%;
+        }
+        .grey-bg {
+            background-color: #eee;
+        }
+        .sign-area {
+            height: 30px;
+            border-bottom: 1px solid #999;
+        }
+        .small-text {
+            font-size: 12px;
+        }
+        .note-text {
+            font-size: 12px;
+            line-height: 1.3;
+        }
+        .form-footer {
+            text-align: right;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-title">淡江大學課外組社團器材借用單</div>
+        
+        <table>
+            <tr>
+                <td rowspan="4" width="25%">借用社團</td>
+                <td colspan="2" width="35%"></td>
+                <td width="20%">預約借用人</td>
+                <td width="20%">實際借用人</td>
+            </tr>
+            <tr>
+                <td rowspan="3">
+                    借用時間<br>
+                    借出：<input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;"><br>
+                    歸還：<input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;"><br>
+                    (活動日期前後加一天，最多七天)
+                </td>
+                <td>姓名</td>
+                <td><input type="text"></td>
+                <td class="grey-bg"></td>
+            </tr>
+            <tr>
+                <td>學號</td>
+                <td><input type="text"></td>
+                <td class="grey-bg"></td>
+            </tr>
+            <tr>
+                <td>公文編號</td>
+                <td><input type="text"></td>
+                <td>手機</td>
+                <td><input type="tel"></td>
+            </tr>
+            <tr>
+                <td>活動名稱</td>
+                <td colspan="2"><input type="text"></td>
+                <td>職務</td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>借用地點</td>
+                <td colspan="2">
+                    <input type="checkbox" id="inSchool"> <label for="inSchool">校內</label>
+                    <input type="checkbox" id="outSchool"> <label for="outSchool">校外：</label>
+                    <input type="text" style="width: 60%;">
+                </td>
+                <td>日期</td>
+                <td>(預約) <input type="text" style="width: 30px;"></td>
+                <td>(領取) <input type="text" style="width: 30px;"></td>
+            </tr>
+            <tr>
+                <td colspan="5" class="note-text">
+                    本人領用器材時，已確認數量正常、運作正常。若歸還時超出時限，或借用期間未妥善保管，導致故障、遺失，願受相關賠償或懲罰。
+                    <div style="text-align: right; margin-top: 5px;">領器材再簽名<div class="sign-area"></div></div>
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th width="20%">器材名稱</th>
+                <th width="10%">數量</th>
+                <th width="20%">器材編號</th>
+                <th width="20%">器材名稱</th>
+                <th width="10%">數量</th>
+                <th width="20%">器材編號</th>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="bigToya"> <label for="bigToya">大 TOYA(雙)</label><br>
+                    <span class="small-text">*含 2 支無線 MIC、電源線</span>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="foldChair"> <label for="foldChair">摺疊椅</label>
+                </td>
+                <td>黑 <input type="number" style="width: 25px;"> 橘 <input type="number" style="width: 25px;"> 藍 <input type="number" style="width: 25px;"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="midToyaDouble"> <label for="midToyaDouble">中 TOYA(雙)</label><br>
+                    <span class="small-text">*含 2 支無線 MIC、電源線</span>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="foldTable"> <label for="foldTable">摺疊桌</label>
+                </td>
+                <td><input type="number"></td>
+                <td>*借出日期<input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="midToyaSingle"> <label for="midToyaSingle">中 TOYA(單)</label><br>
+                    <span class="small-text">*含 1 支無線 MIC、電源線</span>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="plasticChair"> <label for="plasticChair">塑膠椅</label>
+                </td>
+                <td><input type="number"></td>
+                <td>*借出日期<input type="text"></td>
+            </tr>
+            <tr>
+                <td rowspan="2">
+                    <input type="checkbox" id="smallToyaSingle"> <label for="smallToyaSingle">小 TOYA(單)</label><br>
+                    <span class="small-text">*含 1 支無線 MIC、電源線</span>
+                </td>
+                <td rowspan="2"><input type="number"></td>
+                <td rowspan="2"><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="stagePiece"> <label for="stagePiece">舞台片</label>
+                </td>
+                <td><input type="number"></td>
+                <td>*借出日期<input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="toolBucket"> <label for="toolBucket">工具桶</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="digitalCamera"> <label for="digitalCamera">數位相機</label><br>
+                    <span class="small-text">*含電池、充電座(線)</span>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="stageSteps"> <label for="stageSteps">階梯(舞台片)</label>
+                </td>
+                <td><input type="number"></td>
+                <td>*借出日期<input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="memoryCard1"> <label for="memoryCard1">記憶卡</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="redPillar"> <label for="redPillar">紅龍柱</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="dv"> <label for="dv">DV</label><br>
+                    <span class="small-text">*含電池、USB 傳輸線、電源線</span>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="timingBell"> <label for="timingBell">計時鈴</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="memoryCard2"> <label for="memoryCard2">記憶卡</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="scoreBoard"> <label for="scoreBoard">記分板</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="tripod"> <label for="tripod">腳架(含雲台)</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="numberCloth"> <label for="numberCloth">號碼衣</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="projector"> <label for="projector">單槍</label><br>
+                    <span class="small-text">*含電源線</span>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="stopwatch"> <label for="stopwatch">碼錶</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="hdmiCable"> <label for="hdmiCable">HDMI 線(黑)</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="medKit"> <label for="medKit">醫藥箱</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="vgaCable"> <label for="vgaCable">VGA 線(藍)</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="handAmp"> <label for="handAmp">手提擴音箱</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="projScreen"> <label for="projScreen">投影幕</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="tempGun"> <label for="tempGun">額溫槍</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="audioSource"> <label for="audioSource">音源線</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="flagPole"> <label for="flagPole">旗桿</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="extCord"> <label for="extCord">延長線</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="flagBase"> <label for="flagBase">旗座</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="rollExtCord"> <label for="rollExtCord">捲筒延長線</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td>
+                    <input type="checkbox" id="flagBar"> <label for="flagBar">旗橫桿</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td rowspan="1">
+                    <input type="checkbox" id="socketAdapter"> <label for="socketAdapter">插座轉接頭</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+                <td colspan="3" rowspan="3">
+                    <table style="border: none;">
+                        <tr>
+                            <td style="border: none; width: 40%;">預約登記章</td>
+                            <td style="border: none; width: 60%;">工 讀 生 登 記</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding-top: 10px;">預約器材經手人</td>
+                            <td style="border: none; padding-top: 10px;">工 讀 生 簽 名</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding-bottom: 5px;">
+                                <input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;"> 登記
+                            </td>
+                            <td style="border: none; padding-bottom: 5px;">
+                                證件： <input type="text" style="width: 70%;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding-top: 5px;">借出器材經手人</td>
+                            <td style="border: none; padding-top: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding-bottom: 5px;">
+                                <input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;">
+                            </td>
+                            <td style="border: none;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding-top: 5px;">歸還器材經手人</td>
+                            <td style="border: none; padding-top: 5px;"></td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding-bottom: 5px;">
+                                <input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;">
+                            </td>
+                            <td style="border: none; padding-bottom: 5px;">
+                                <input type="checkbox" id="noOverdue"> <label for="noOverdue">無逾期</label>
+                                <input type="checkbox" id="overdue"> <label for="overdue">逾期</label>
+                                <input type="text" style="width: 20px;"> 天
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="walkieTalkie"> <label for="walkieTalkie">對講機(支)</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="checkbox" id="megaphone"> <label for="megaphone">喊話器</label>
+                </td>
+                <td><input type="number"></td>
+                <td><input type="text"></td>
+            </tr>
+        </table>
+        
+        <div style="padding: 10px 5px;">
+            <input type="checkbox" id="agreePP"> <label for="agreePP">本人以閱讀並同意淡江大學課外組個人資料蒐集、處理及利用告知說明。</label>
+        </div>
+        
+        <div class="form-footer">
+            保存期限： <input type="text" style="width: 30px;"> 年　　表單編號：ASBX-Q03-002-FM222-08
+        </div>
+    </div>
+</body>
+</html>
