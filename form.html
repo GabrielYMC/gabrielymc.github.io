@@ -5,26 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>淡江大學課外組社團器材借用單</title>
     <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
         * {
             box-sizing: border-box;
-            font-family: "SimSun", "Microsoft JhengHei", Arial, sans-serif;
+            font-family: "Microsoft JhengHei", PMingLiU, Arial, sans-serif;
+            font-size: 12px;
         }
         body {
             margin: 0;
-            padding: 10px;
-            font-size: 14px;
+            padding: 0;
+            width: 210mm;
+            min-height: 297mm;
+            background-color: white;
         }
         .form-container {
             width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
+            margin: 0;
             border: 1px solid #000;
         }
         .form-title {
             text-align: center;
             font-size: 24px;
             font-weight: bold;
-            margin: 15px 0;
+            margin: 10px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid #000;
         }
         table {
             width: 100%;
@@ -37,42 +45,76 @@
         th, td {
             padding: 5px;
             vertical-align: middle;
+            position: relative;
         }
         input[type="text"], input[type="number"], input[type="tel"] {
             width: 100%;
-            padding: 3px;
+            padding: 2px;
             border: none;
             border-bottom: 1px dotted #999;
             background-color: transparent;
         }
+        .short-input {
+            width: 30px;
+            display: inline-block;
+        }
+        .very-short-input {
+            width: 20px;
+            display: inline-block;
+        }
         input[type="checkbox"] {
-            transform: scale(1.2);
-            margin-right: 5px;
-        }
-        .borrow-info {
-            width: 60%;
-        }
-        .borrower-info {
-            width: 40%;
+            margin: 0 5px 0 0;
+            vertical-align: middle;
         }
         .grey-bg {
             background-color: #eee;
         }
-        .sign-area {
-            height: 30px;
-            border-bottom: 1px solid #999;
+        .text-center {
+            text-align: center;
         }
-        .small-text {
-            font-size: 12px;
+        .text-right {
+            text-align: right;
+        }
+        .header-cell {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            text-align: center;
         }
         .note-text {
             font-size: 12px;
-            line-height: 1.3;
+            line-height: 1.4;
+        }
+        .small-text {
+            font-size: 10px;
+        }
+        .bottom-sign {
+            text-align: right;
+            margin-top: 6px;
+        }
+        .sign-line {
+            display: inline-block;
+            width: 120px;
+            border-bottom: 1px solid #000;
+            margin-left: 10px;
         }
         .form-footer {
             text-align: right;
             font-size: 11px;
-            margin-top: 5px;
+            margin: 10px 5px 5px 0;
+        }
+        .no-border {
+            border: none;
+        }
+        .flex-container {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+        }
+        .borrower-info-right {
+            background-color: #eee;
         }
     </style>
 </head>
@@ -82,341 +124,424 @@
         
         <table>
             <tr>
-                <td rowspan="4" width="25%">借用社團</td>
-                <td colspan="2" width="35%"></td>
-                <td width="20%">預約借用人</td>
-                <td width="20%">實際借用人</td>
+                <td rowspan="4" style="width: 15%;">借用社團</td>
+                <td colspan="2" style="width: 35%;"></td>
+                <td style="width: 25%;">預約借用人</td>
+                <td class="borrower-info-right" style="width: 25%;">實際借用人</td>
             </tr>
             <tr>
-                <td rowspan="3">
-                    借用時間<br>
-                    借出：<input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;"><br>
-                    歸還：<input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;"><br>
-                    (活動日期前後加一天，最多七天)
+                <td rowspan="3" style="width: 25%;">
+                    借用時間<br><br>
+                    借出：<input type="text" class="short-input"> 年 <input type="text" class="very-short-input"> 月<br>
+                    <span style="margin-left: 42px;"></span> <input type="text" class="very-short-input"> 日星期 <input type="text" class="very-short-input"><br><br>
+                    歸還：<input type="text" class="short-input"> 年 <input type="text" class="very-short-input"> 月<br>
+                    <span style="margin-left: 42px;"></span> <input type="text" class="very-short-input"> 日星期 <input type="text" class="very-short-input"><br><br>
+                    <span class="small-text">(活動日期前後加一天，最多七天)</span>
                 </td>
-                <td>姓名</td>
-                <td><input type="text"></td>
-                <td class="grey-bg"></td>
+                <td style="width: 10%;">姓名</td>
+                <td style="width: 25%;"><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td class="borrower-info-right" style="width: 25%;"></td>
             </tr>
             <tr>
-                <td>學號</td>
-                <td><input type="text"></td>
-                <td class="grey-bg"></td>
+                <td style="width: 10%;">學號</td>
+                <td style="width: 25%;"><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td class="borrower-info-right" style="width: 25%;"></td>
             </tr>
             <tr>
-                <td>公文編號</td>
-                <td><input type="text"></td>
-                <td>手機</td>
-                <td><input type="tel"></td>
+                <td style="width: 10%;">公文編號</td>
+                <td style="width: 25%;"><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td style="width: 25%;">手機</td>
             </tr>
             <tr>
-                <td>活動名稱</td>
-                <td colspan="2"><input type="text"></td>
-                <td>職務</td>
-                <td><input type="text"></td>
+                <td style="width: 15%;">活動名稱</td>
+                <td colspan="2" style="width: 35%;"><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td style="width: 25%;">職務</td>
+                <td style="width: 25%;"><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
-                <td>借用地點</td>
-                <td colspan="2">
+                <td style="width: 15%;">借用地點</td>
+                <td colspan="2" style="width: 35%; padding-left: 15px;">
                     <input type="checkbox" id="inSchool"> <label for="inSchool">校內</label>
                     <input type="checkbox" id="outSchool"> <label for="outSchool">校外：</label>
-                    <input type="text" style="width: 60%;">
+                    <div style="display: inline-block; width: 65%; border-bottom: 1px dotted #999;"></div>
                 </td>
-                <td>日期</td>
-                <td>(預約) <input type="text" style="width: 30px;"></td>
-                <td>(領取) <input type="text" style="width: 30px;"></td>
+                <td style="width: 10%;">日期</td>
+                <td style="width: 20%;">(預約)</td>
+                <td style="width: 20%;">(領取)</td>
             </tr>
             <tr>
-                <td colspan="5" class="note-text">
+                <td colspan="6" class="note-text" style="padding: 8px;">
                     本人領用器材時，已確認數量正常、運作正常。若歸還時超出時限，或借用期間未妥善保管，導致故障、遺失，願受相關賠償或懲罰。
-                    <div style="text-align: right; margin-top: 5px;">領器材再簽名<div class="sign-area"></div></div>
+                    <div class="bottom-sign">領器材再簽名<span class="sign-line"></span></div>
                 </td>
             </tr>
         </table>
 
         <table>
-            <tr>
-                <th width="20%">器材名稱</th>
-                <th width="10%">數量</th>
-                <th width="20%">器材編號</th>
-                <th width="20%">器材名稱</th>
-                <th width="10%">數量</th>
-                <th width="20%">器材編號</th>
+            <tr class="header-cell">
+                <td style="width: 20%;">器材名稱</td>
+                <td style="width: 10%;">數量</td>
+                <td style="width: 20%;">器材編號</td>
+                <td style="width: 20%;">器材名稱</td>
+                <td style="width: 10%;">數量</td>
+                <td style="width: 20%;">器材編號</td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="bigToya"> <label for="bigToya">大 TOYA(雙)</label><br>
-                    <span class="small-text">*含 2 支無線 MIC、電源線</span>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="bigToya"> <label for="bigToya">大 TOYA(雙)</label>
+                    </div>
+                    <div class="small-text">*含 2 支無線 MIC、電源線</div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="foldChair"> <label for="foldChair">摺疊椅</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="foldChair"> <label for="foldChair">摺疊椅</label>
+                    </div>
                 </td>
-                <td>黑 <input type="number" style="width: 25px;"> 橘 <input type="number" style="width: 25px;"> 藍 <input type="number" style="width: 25px;"></td>
-                <td><input type="text"></td>
+                <td>
+                    黑 <div style="display: inline-block; width: 20px; border-bottom: 1px dotted #999;"></div>
+                    橘 <div style="display: inline-block; width: 20px; border-bottom: 1px dotted #999;"></div><br/>
+                    藍 <div style="display: inline-block; width: 20px; border-bottom: 1px dotted #999;"></div>
+                </td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="midToyaDouble"> <label for="midToyaDouble">中 TOYA(雙)</label><br>
-                    <span class="small-text">*含 2 支無線 MIC、電源線</span>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="midToyaDouble"> <label for="midToyaDouble">中 TOYA(雙)</label>
+                    </div>
+                    <div class="small-text">*含 2 支無線 MIC、電源線</div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="foldTable"> <label for="foldTable">摺疊桌</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="foldTable"> <label for="foldTable">摺疊桌</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td>*借出日期<input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td>*借出日期<div style="display: inline-block; width: 50%; border-bottom: 1px dotted #999;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="midToyaSingle"> <label for="midToyaSingle">中 TOYA(單)</label><br>
-                    <span class="small-text">*含 1 支無線 MIC、電源線</span>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="midToyaSingle"> <label for="midToyaSingle">中 TOYA(單)</label>
+                    </div>
+                    <div class="small-text">*含 1 支無線 MIC、電源線</div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="plasticChair"> <label for="plasticChair">塑膠椅</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="plasticChair"> <label for="plasticChair">塑膠椅</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td>*借出日期<input type="text"></td>
-            </tr>
-            <tr>
-                <td rowspan="2">
-                    <input type="checkbox" id="smallToyaSingle"> <label for="smallToyaSingle">小 TOYA(單)</label><br>
-                    <span class="small-text">*含 1 支無線 MIC、電源線</span>
-                </td>
-                <td rowspan="2"><input type="number"></td>
-                <td rowspan="2"><input type="text"></td>
-                <td>
-                    <input type="checkbox" id="stagePiece"> <label for="stagePiece">舞台片</label>
-                </td>
-                <td><input type="number"></td>
-                <td>*借出日期<input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td>*借出日期<div style="display: inline-block; width: 50%; border-bottom: 1px dotted #999;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="toolBucket"> <label for="toolBucket">工具桶</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="smallToyaSingle"> <label for="smallToyaSingle">小 TOYA(單)</label>
+                    </div>
+                    <div class="small-text">*含 1 支無線 MIC、電源線</div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="stagePiece"> <label for="stagePiece">舞台片</label>
+                    </div>
+                </td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td>*借出日期<div style="display: inline-block; width: 50%; border-bottom: 1px dotted #999;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="digitalCamera"> <label for="digitalCamera">數位相機</label><br>
-                    <span class="small-text">*含電池、充電座(線)</span>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="digitalCamera"> <label for="digitalCamera">數位相機</label>
+                    </div>
+                    <div class="small-text">*含電池、充電座(線)</div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="stageSteps"> <label for="stageSteps">階梯(舞台片)</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="toolBucket"> <label for="toolBucket">工具桶</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td>*借出日期<input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="memoryCard1"> <label for="memoryCard1">記憶卡</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="memoryCard1"> <label for="memoryCard1">記憶卡</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="redPillar"> <label for="redPillar">紅龍柱</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="stageSteps"> <label for="stageSteps">階梯(舞台片)</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td>*借出日期<div style="display: inline-block; width: 50%; border-bottom: 1px dotted #999;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="dv"> <label for="dv">DV</label><br>
-                    <span class="small-text">*含電池、USB 傳輸線、電源線</span>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="dv"> <label for="dv">DV</label>
+                    </div>
+                    <div class="small-text">*含電池、USB 傳輸線、電源線</div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="timingBell"> <label for="timingBell">計時鈴</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="redPillar"> <label for="redPillar">紅龍柱</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="memoryCard2"> <label for="memoryCard2">記憶卡</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="memoryCard2"> <label for="memoryCard2">記憶卡</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="scoreBoard"> <label for="scoreBoard">記分板</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="timingBell"> <label for="timingBell">計時鈴</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="tripod"> <label for="tripod">腳架(含雲台)</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="tripod"> <label for="tripod">腳架(含雲台)</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="numberCloth"> <label for="numberCloth">號碼衣</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="scoreBoard"> <label for="scoreBoard">記分板</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="projector"> <label for="projector">單槍</label><br>
-                    <span class="small-text">*含電源線</span>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="projector"> <label for="projector">單槍</label>
+                    </div>
+                    <div class="small-text">*含電源線</div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="stopwatch"> <label for="stopwatch">碼錶</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="numberCloth"> <label for="numberCloth">號碼衣</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="hdmiCable"> <label for="hdmiCable">HDMI 線(黑)</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="hdmiCable"> <label for="hdmiCable">HDMI 線(黑)</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="medKit"> <label for="medKit">醫藥箱</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="stopwatch"> <label for="stopwatch">碼錶</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="vgaCable"> <label for="vgaCable">VGA 線(藍)</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="vgaCable"> <label for="vgaCable">VGA 線(藍)</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="handAmp"> <label for="handAmp">手提擴音箱</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="medKit"> <label for="medKit">醫藥箱</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="projScreen"> <label for="projScreen">投影幕</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="projScreen"> <label for="projScreen">投影幕</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="tempGun"> <label for="tempGun">額溫槍</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="handAmp"> <label for="handAmp">手提擴音箱</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="audioSource"> <label for="audioSource">音源線</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="audioSource"> <label for="audioSource">音源線</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="flagPole"> <label for="flagPole">旗桿</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="tempGun"> <label for="tempGun">額溫槍</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="extCord"> <label for="extCord">延長線</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="extCord"> <label for="extCord">延長線</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="flagBase"> <label for="flagBase">旗座</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="flagPole"> <label for="flagPole">旗桿</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="rollExtCord"> <label for="rollExtCord">捲筒延長線</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="rollExtCord"> <label for="rollExtCord">捲筒延長線</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
                 <td>
-                    <input type="checkbox" id="flagBar"> <label for="flagBar">旗橫桿</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="flagBase"> <label for="flagBase">旗座</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
             </tr>
             <tr>
-                <td rowspan="1">
-                    <input type="checkbox" id="socketAdapter"> <label for="socketAdapter">插座轉接頭</label>
+                <td>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="socketAdapter"> <label for="socketAdapter">插座轉接頭</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
-                <td colspan="3" rowspan="3">
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="flagBar"> <label for="flagBar">旗橫桿</label>
+                    </div>
+                </td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+            </tr>
+            <tr>
+                <td rowspan="3">
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="walkieTalkie"> <label for="walkieTalkie">對講機(支)</label>
+                    </div>
+                </td>
+                <td rowspan="3"><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 60px;"></div></td>
+                <td rowspan="3"><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 60px;"></div></td>
+                <td colspan="3" style="padding: 0;">
                     <table style="border: none;">
                         <tr>
-                            <td style="border: none; width: 40%;">預約登記章</td>
-                            <td style="border: none; width: 60%;">工 讀 生 登 記</td>
+                            <td style="border: none; width: 40%; text-align: center; border-bottom: 1px solid #000; padding: 5px;">預約登記章</td>
+                            <td style="border: none; width: 60%; text-align: center; border-bottom: 1px solid #000; padding: 5px;">工 讀 生 登 記</td>
+                        </tr>
+                    </table>
+                    <table style="border: none;">
+                        <tr>
+                            <td style="border: none; width: 40%; padding: 5px;">預約器材經手人</td>
+                            <td style="border: none; width: 60%; padding: 5px;">工 讀 生 簽 名</td>
                         </tr>
                         <tr>
-                            <td style="border: none; padding-top: 10px;">預約器材經手人</td>
-                            <td style="border: none; padding-top: 10px;">工 讀 生 簽 名</td>
-                        </tr>
-                        <tr>
-                            <td style="border: none; padding-bottom: 5px;">
-                                <input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;"> 登記
+                            <td style="border: none; padding: 5px;">
+                                <input type="text" class="very-short-input"> 年 <input type="text" class="very-short-input"> 月 <input type="text" class="very-short-input"> 日星期
+                                <input type="text" class="very-short-input"> 登記
                             </td>
-                            <td style="border: none; padding-bottom: 5px;">
-                                證件： <input type="text" style="width: 70%;">
+                            <td style="border: none; padding: 5px;">
+                                證件：<div style="display: inline-block; width: 70%; border-bottom: 1px dotted #999;"></div>
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: none; padding-top: 5px;">借出器材經手人</td>
-                            <td style="border: none; padding-top: 5px;"></td>
+                            <td style="border: none; border-top: 1px solid #000; padding: 5px;">借出器材經手人</td>
+                            <td style="border: none; padding: 5px;"></td>
                         </tr>
                         <tr>
-                            <td style="border: none; padding-bottom: 5px;">
-                                <input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;">
+                            <td style="border: none; padding: 5px;">
+                                <input type="text" class="very-short-input"> 年 <input type="text" class="very-short-input"> 月 <input type="text" class="very-short-input"> 日星期
+                                <input type="text" class="very-short-input">
                             </td>
-                            <td style="border: none;"></td>
+                            <td style="border: none; padding: 5px;"></td>
                         </tr>
                         <tr>
-                            <td style="border: none; padding-top: 5px;">歸還器材經手人</td>
-                            <td style="border: none; padding-top: 5px;"></td>
+                            <td style="border: none; border-top: 1px solid #000; padding: 5px;">歸還器材經手人</td>
+                            <td style="border: none; padding: 5px;"></td>
                         </tr>
                         <tr>
-                            <td style="border: none; padding-bottom: 5px;">
-                                <input type="text" style="width: 30px;"> 年 <input type="text" style="width: 20px;"> 月 <input type="text" style="width: 20px;"> 日星期<input type="text" style="width: 20px;">
+                            <td style="border: none; padding: 5px;">
+                                <input type="text" class="very-short-input"> 年 <input type="text" class="very-short-input"> 月 <input type="text" class="very-short-input"> 日星期
+                                <input type="text" class="very-short-input">
                             </td>
-                            <td style="border: none; padding-bottom: 5px;">
+                            <td style="border: none; padding: 5px;">
                                 <input type="checkbox" id="noOverdue"> <label for="noOverdue">無逾期</label>
                                 <input type="checkbox" id="overdue"> <label for="overdue">逾期</label>
-                                <input type="text" style="width: 20px;"> 天
+                                <input type="text" class="very-short-input"> 天
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
+            <tr></tr>
+            <tr></tr>
             <tr>
                 <td>
-                    <input type="checkbox" id="walkieTalkie"> <label for="walkieTalkie">對講機(支)</label>
+                    <div class="checkbox-label">
+                        <input type="checkbox" id="megaphone"> <label for="megaphone">喊話器</label>
+                    </div>
                 </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="checkbox" id="megaphone"> <label for="megaphone">喊話器</label>
-                </td>
-                <td><input type="number"></td>
-                <td><input type="text"></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td><div style="width: 100%; border-bottom: 1px dotted #999; min-height: 20px;"></div></td>
+                <td colspan="3"></td>
             </tr>
         </table>
         
-        <div style="padding: 10px 5px;">
+        <div style="padding: 10px 5px; border-top: 1px solid #000;">
             <input type="checkbox" id="agreePP"> <label for="agreePP">本人以閱讀並同意淡江大學課外組個人資料蒐集、處理及利用告知說明。</label>
         </div>
         
